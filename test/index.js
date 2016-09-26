@@ -2,6 +2,7 @@ const test = require('tape')
 const parser = require('@m59/tap-parser')
 const filter = require('../')
 const through = require('throo')
+const duplex = require('duplexer')
 
 test('composing through streams', t => {
   t.plan(1)
@@ -13,11 +14,24 @@ test('composing through streams', t => {
     push(String(chunk) + 'c')
     cb()
   })
-  const c = a.pipe(b)
+  const c = duplex(a, a.pipe(b))
   c.on('data', data => {
     t.equal(String(data), 'abc')
   })
-  a.write('a')
+  c.write('a')
+})
+
+test.only('composing duplex streams', t => {
+  t.plan(1)
+  const a = parser()
+  const b = filter(['plan', 'test'])
+  const c = duplex(a, a.pipe(b))
+  c.on('data', data => {
+    t.equal(data, '1..2\n')
+    //t.equal(data, 'ok 1 blah\n')
+  })
+  c.write('1..2\n')
+  //c.write('ok 1 blah\n')
 })
 
 test('parser stream', t => {
@@ -39,7 +53,7 @@ test('filter stream filters out "plan" when given "test" type', t => {
   f.write({type: 'test', value: 'ok 1 blah'})
 })
 
-test('composes with parser', t => {
+test.skip('composes with parser', t => {
   t.plan(1)
   const a = parser()
   const b = filter(['test'])

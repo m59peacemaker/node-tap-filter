@@ -24,6 +24,7 @@ const assertTypesAreValid = types => {
 const filter = (types = [], reverse = false) => {
   assertTypesAreValid(types)
   return through((push, chunk, enc, cb) => {
+    console.log(chunk)
     const should = shouldFilter(types, chunk)
     if (reverse ? !should : should) {
       push(chunk.value + '\n')
