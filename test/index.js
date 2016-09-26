@@ -17,7 +17,7 @@ test('composing through streams', t => {
   c.on('data', data => {
     t.equal(String(data), 'abc')
   })
-  c.write('a')
+  a.write('a')
 })
 
 test('parser stream', t => {
@@ -41,10 +41,12 @@ test('filter stream filters out "plan" when given "test" type', t => {
 
 test('composes with parser', t => {
   t.plan(1)
-  const stream = parser().pipe(filter(['test']))
-  stream.on('data', data => {
+  const a = parser()
+  const b = filter(['test'])
+  const c = a.pipe(b)
+  c.on('data', data => {
     t.equal(data, 'ok 1 stuff\n')
   })
-  stream.write('1..2\n')
-  stream.write('ok 1 stuff\n')
+  a.write('1..2\n')
+  a.write('ok 1 stuff\n')
 })
