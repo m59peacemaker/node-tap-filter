@@ -23,12 +23,13 @@
   "author": {
     "name": "Johnny Hauser",
     "email": "johnnyhauser@gmail.com"
-  }, 
+  },
   "license": "VOL",
   "dependencies": {
     "@m59/tap-parser": "^1.0.0",
     "commander": "^2.9.0",
     "duplexer": "^0.1.1",
+    "duplexer2": "^0.1.4",
     "throo": "^1.0.0",
     "through2": "^2.0.1"
   },
