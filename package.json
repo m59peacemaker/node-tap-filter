@@ -1,6 +1,6 @@
 {
   "name": "tap-filter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Stream that receives TAP and filters it according to given TAP types.",
   "main": "index.js",
   "bin": {
