@@ -1,5 +1,7 @@
+const parser = require('@m59/tap-parser')
 const through = require('throo').obj
-const supportedTypes = require('./lib/supported-types')
+const duplex = require('duplexer')
+const assertTypesAreValid = require('./lib/assert-types-are-valid')
 
 const shouldFilter = (types, chunk) => {
   if (chunk.type === 'test') {
@@ -13,24 +15,21 @@ const shouldFilter = (types, chunk) => {
   return types.includes(chunk.type)
 }
 
-const assertTypesAreValid = types => {
-  types.forEach(type => {
-    if (!supportedTypes.includes(type)) {
-      throw new Error(`"${type}" is not a valid TAP type`)
-    }
-  })
-}
-
-const filter = (types = [], reverse = false) => {
-  assertTypesAreValid(types)
+const filterParsed = (types, reverse) => {
   return through((push, chunk, enc, cb) => {
-    console.log(chunk)
     const should = shouldFilter(types, chunk)
     if (reverse ? !should : should) {
       push(chunk.value + '\n')
     }
     cb()
   })
+}
+
+const filter = (types = [], reverse = false) => {
+  assertTypesAreValid(types)
+  const parserStream = parser()
+  const filteredStream = parserStream.pipe(filterParsed(types, reverse))
+  return duplex(parserStream, filteredStream)
 }
 
 module.exports = filter
