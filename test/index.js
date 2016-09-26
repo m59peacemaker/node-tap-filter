@@ -12,11 +12,22 @@ test('parser stream', t => {
   p.write('1..2\n')
 })
 
-test('filters out "plan" when given "test" type', t => {
+test('filter stream filters out "plan" when given "test" type', t => {
   t.plan(1)
-  const p = parser().pipe(filter(['test'])).pipe(through((push, chunk, enc, cb) => {
-    t.equal(String(chunk), 'ok 1 stuff\n')
-  }))
-  p.write('1..2\n')
-  p.write('ok 1 stuff\n')
+  const f = filter(['test'])
+  f.on('data', data => {
+    t.equal(data, 'ok 1 blah\n')
+  })
+  f.write({type: 'plan', value: '1..2'})
+  f.write({type: 'test', value: 'ok 1 blah'})
+})
+
+test('composes with parser', t => {
+  t.plan(1)
+  const stream = parser().pipe(filter(['test']))
+  stream.on('data', data => {
+    t.equal(data, 'ok 1 stuff\n')
+  })
+  stream.write('1..2\n')
+  stream.write('ok 1 stuff\n')
 })
