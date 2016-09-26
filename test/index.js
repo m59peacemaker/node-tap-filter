@@ -3,6 +3,23 @@ const parser = require('@m59/tap-parser')
 const filter = require('../')
 const through = require('throo')
 
+test('composing through streams', t => {
+  t.plan(1)
+  const a = through((push, chunk, enc, cb) => {
+    push(String(chunk) + 'b')
+    cb()
+  })
+  const b = through((push, chunk, enc, cb) => {
+    push(String(chunk) + 'c')
+    cb()
+  })
+  const c = a.pipe(b)
+  c.on('data', data => {
+    t.equal(String(data), 'abc')
+  })
+  c.write('a')
+})
+
 test('parser stream', t => {
   t.plan(1)
   const p = parser()
