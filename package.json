@@ -1,6 +1,6 @@
 {
   "name": "tap-filter",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Stream that receives TAP and filters it according to given TAP types.",
   "main": "index.js",
   "bin": {
@@ -29,7 +29,6 @@
     "@m59/tap-parser": "^1.0.0",
     "commander": "^2.9.0",
     "duplexer": "^0.1.1",
-    "duplexer2": "^0.1.4",
     "throo": "^1.0.0",
     "through2": "^2.0.1"
   },
