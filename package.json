@@ -1,6 +1,6 @@
 {
   "name": "tap-filter",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Stream that receives TAP and filters it according to given TAP types.",
   "main": "index.js",
   "bin": {
@@ -24,7 +24,7 @@
     "name": "Johnny Hauser",
     "email": "johnnyhauser@gmail.com"
   },
-  "license": "VOL",
+  "license": "CC0-1.0",
   "dependencies": {
     "@m59/tap-parser": "^1.0.0",
     "commander": "^2.9.0",
